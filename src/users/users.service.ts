@@ -10,24 +10,31 @@ export class UsersService {
     @InjectRepository(UserEntity) private userRepository: Repository<UserEntity>
   ) {}
 
-  createUser(body: any) {
-    console.log('DESDE EL SERVICIO');
-    console.log(body);
-    console.log(this.userRepository);
-    
+  async createUser(body: any) {
+    const user = await this.userRepository.findBy({
+      email: body.email,
+      password: body.password
+    });    
 
-    const user = this.userRepository.create(body);
-    return this.userRepository.save(user);
+    if (user.length === 0) { 
+      const user = this.userRepository.create(body);
+
+      let result = this.userRepository.save(user);
+      const state = { state: true };
+      return { ...result, ...state };
+    }
+
+    return { state: false, message: 'user already exist' };
   }
 
-  async findUser(email: string, password: string) {
+  async findUser(email: string, password: string) {    
     const user = await this.userRepository.findBy({
       email: email,
       password: password
-    });
+    });    
 
-    if (user) { return true; }
+    if (user.length === 0) { return false; }
 
-    return false;
+    return true;
   }
 }
