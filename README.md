@@ -22,6 +22,32 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+## Docker
+
+in a terminal, run:
+
+```bash
+#Levantar el contenedor docker con la base de datos Postresql
+$ docker-compose up -d database
+
+#Comprobacion del contenedor
+$ docker-compose ps
+
+#Luego, en Doker Desktop, abrir una terminal y ejecutar
+$ psql -h localhost -d instaplus -U postgres
+
+```
+
+## Run Migrations
+```bash
+$ npm run typeorm:generate-migration --name=CreatePost
+
+$ npm run typeorm:run-migrations
+
+#Se recomienda detener el servicio de Postresql en windows
+https://wanago.io/2022/07/25/api-nestjs-database-migrations-typeorm/
+```
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
