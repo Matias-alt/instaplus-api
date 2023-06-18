@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import PublicationEntity from '../publications/publication.entity';
  
 @Entity()
 class UserEntity {
@@ -21,6 +22,9 @@ class UserEntity {
 
   @Column()
   password: string
+
+  @OneToMany(() => PublicationEntity, publication => publication.user)
+  publications: PublicationEntity[];
 }
  
 export default UserEntity;
