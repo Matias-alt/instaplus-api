@@ -2,8 +2,10 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import UserEntity from './src/users/user.entity';
+import PublicationEntity from './src/publications/publication.entity';
 
 import { CreateUserTable1685154334781 } from './src/database/migrations/1685154334781-create_user_table';
+import { CreatePublicationTable1687103150684 } from './src/database/migrations/1687103150684-create_publication_table';
  
 config();
  
@@ -16,6 +18,6 @@ export default new DataSource({
   username: configService.get('POSTGRES_USER'),
   password: configService.get('POSTGRES_PASSWORD'),
   database: configService.get('POSTGRES_DB'),
-  entities: [UserEntity],
-  migrations: [CreateUserTable1685154334781]
+  entities: [UserEntity, PublicationEntity],
+  migrations: [CreateUserTable1685154334781, CreatePublicationTable1687103150684]
 });

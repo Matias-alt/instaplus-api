@@ -12,4 +12,4 @@ import  PublicationEntity from './publication.entity'
   controllers: [PublicationsController],
   providers: [PublicationsService]
 })
-export class UsersModule {}
+export class PublicationsModule {}

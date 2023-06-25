@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import type { File } from 'multer';
+import { createWriteStream } from 'fs';
 
 import PublicationEntity from './publication.entity';
 
@@ -10,20 +12,40 @@ export class PublicationsService {
     @InjectRepository(PublicationEntity) private Publication: Repository<PublicationEntity>
   ) {}
 
-  async findPublication(id: number) {    
-    const publication = await this.Publication.findBy({ id: id });
+  async findPublications() {    
+    const publications = await this.Publication.find();
 
-    if (publication.length === 0) { return false; }
+    console.log(publications);
 
-    return publication;
+    if (publications.length === 0) { return false; }
+
+    return publications;
   }
 
-  async createPublication(body: any) {
-    const publication = this.Publication.create(body);
+  async createPublication(file: File, title: string, description: string, publicationDate: string) {
+    const { originalname, buffer } = file;
+
+    const filePath = `public/${Math.random().toString(36).substring(2, 10)}${originalname}`;
+
+    const publicationToSave = {
+      title: title,
+      description: description,
+      publicationDate: publicationDate,
+      images: [`http://localhost:3000/${filePath}`]
+    }
+    const publication = this.Publication.create(publicationToSave);
 
     const result = this.Publication.save(publication);
 
-    return { ...result };
+    if (result) {
+      const writeStream = createWriteStream(filePath);
+      writeStream.write(buffer);
+      writeStream.end();
+      
+      return { ...result };
+    } else {
+      return false;
+    }
   }
 
   async updatePublication(body: any, id: number) {
