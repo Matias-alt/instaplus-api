@@ -14,9 +14,6 @@ export class UsersController {
 
   @Post('create')
   create(@Body() body: any) {
-    console.log('CONTROLLEEEEER');
-    console.log(body);
-
     return this.usersService.createUser(body);
   }
 
