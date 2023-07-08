@@ -1,13 +1,22 @@
-import { Controller, Get, Post, Put, Param, Body,  UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body,  UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { PublicationsService } from './publications.service';
 import type { File } from 'multer';
+import { log } from 'console';
 
 @Controller('api/publications')
 export class PublicationsController {
   constructor(
     private publicationsService: PublicationsService
   ) {}
+
+  @Delete('delete/:id')
+  delete(@Param('id') id: number) {
+    console.log(id);
+    
+    return this.publicationsService.deletePublication(id);
+  }
+
 
   @Get('find')
   findAll() {
@@ -16,19 +25,15 @@ export class PublicationsController {
 
   @Get('find/:id')
   find(@Param('id') id: number) {
-    return this.publicationsService.findPublications();
+    return this.publicationsService.findPublication(id);
   }
 
-  @Post('create')
-  create(@Body() body: any) {
+  @Post('update')
+  update(@Body() body: any){
+    console.log('HERE');
     console.log(body);
     
-    //return this.publicationsService.createPublication(body);
-  }
-
-  @Put('update/:id')
-  update(@Param('id') id: number, @Body() body: any) {
-    return this.publicationsService.updatePublication(body, id);
+    return this.publicationsService.updatePublication(body);
   }
 
   @Post('upload')

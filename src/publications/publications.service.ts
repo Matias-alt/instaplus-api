@@ -12,10 +12,14 @@ export class PublicationsService {
     @InjectRepository(PublicationEntity) private Publication: Repository<PublicationEntity>
   ) {}
 
+  async deletePublication(id: number) {    
+    const result = this.Publication.delete(id);
+
+    return { ...result };
+  }
+
   async findPublications() {    
     const publications = await this.Publication.find();
-
-    console.log(publications);
 
     if (publications.length === 0) { return false; }
 
@@ -48,8 +52,8 @@ export class PublicationsService {
     }
   }
 
-  async updatePublication(body: any, id: number) {
-    const publication = await this.Publication.findBy({ id: id });
+  async updatePublication(body: any) {
+    const publication = await this.Publication.findBy({ id: body.id });
 
     if (publication.length === 0) { return false; }
 
@@ -57,5 +61,13 @@ export class PublicationsService {
     const result = this.Publication.save(publication);
 
     return { ...result };
+  }
+
+  async findPublication(id: number) {
+    const publication = await this.Publication.findBy({ id: id });
+
+    if (publication.length === 0) { return false; }
+
+    return publication;
   }
 }
